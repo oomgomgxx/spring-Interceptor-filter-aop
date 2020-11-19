@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>spring-Interceptor-filter-aop</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <shiro-version>1.7.0</shiro-version>
+        <spring-version>5.3.1</spring-version>
+        <servlet-version>3.1.0</servlet-version>
+        <tomcat.version>9.0.20</tomcat.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- servlet 3.1 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-version}</version>
+            <scope>provided</scope><!-- 如果容器有则容器提供 -->
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- spring mvc -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+
+
+        <!-- shiro -->
+        <!-- <dependency>
+             <groupId>org.apache.shiro</groupId>
+             <artifactId>shiro-spring</artifactId>
+             <version>${shiro-version}</version>
+         </dependency>-->
+
+
+        <!-- 不能和 Maven Tomcat 插件同时使用 -->
+        <!-- 如果要用插件则应该设置 <scope>provided</scope>  -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+            <!-- 不进行传播和打包 -->
+            <optional>true</optional>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+
+        <!-- 配合tomcat-embed使用，编译时将views拷贝到classes -->
+        <!-- 因为编译不会像打包那样将全部需要的资源拷贝的输出中 -->
+
+        <!-- 将webapp/views拷贝到target/classes -->
+        <resources>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <includes>
+                    <include>*/*</include>
+                </includes>
+            </resource>
+            <!-- 拷贝到target/classes/META-INF -->
+            <resource>
+                <directory>src/main/resources/META-INF</directory>
+                <targetPath>META-INF</targetPath>
+                <includes>
+                    <include>*/*</include>
+                </includes>
+            </resource>
+        </resources>
+
+
+        <plugins>
+
+            <!-- 如果需要命令行（mvn）执行操作需要添加以下插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- 作用1：导出war包，通过mvn war:war -->
+            <!-- 作用2：导出可直接部署的项目，通过mvn war:exploded -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+
+            <!-- 插件式Tomcat -->
+            <!-- Tomcat有3中形式存在：二进制、插件、内嵌API -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <port>8080</port>
+                    <path>/</path>
+                    <uriEncoding>UTF-8</uriEncoding>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
