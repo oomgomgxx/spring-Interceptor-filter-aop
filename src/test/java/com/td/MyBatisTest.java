@@ -37,7 +37,8 @@ public class MyBatisTest {
     @Test
     @Transactional
     public void testMapper() {
-        User user = User.builder().id(2).name("lisa").age(18).build();
+        User user = User.builder().name("lisa").age(18).build();
         userMapper.insert(user);
+        System.out.println(user);
     }
 }
