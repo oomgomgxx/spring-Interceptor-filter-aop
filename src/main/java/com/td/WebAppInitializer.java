@@ -7,7 +7,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebAppInitializer<getServletApplicationContextInitializers> extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitializer
+        extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     private static final String SERVLET_MAPPING_PATH = "/";
 
